@@ -32,5 +32,5 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Result
+        name: Result-${{ matrix.os }}.json
         path: bin/Debug/net8.0/output/*.json
