@@ -12,10 +12,16 @@ class Program
             OutputFormatter = HtmlValidateFormatter.Names.Json,
             ResultFileFormatter = HtmlValidateFormatter.Names.Json,
             SaveResultToFile = true,
-            WorkingDirectory = "output"
+            WorkingDirectory = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "output")
         });
+
         // read the reddit-frontpage.html file into a string
-        string html = File.ReadAllText("reddit-frontpage.html");
+        string html = File.ReadAllText(
+            Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "reddit-frontpage.html"));
 
         // These are just to show that the html file was read correctly
         Console.WriteLine(html.Substring(0, 10));
