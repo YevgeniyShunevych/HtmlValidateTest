@@ -26,5 +26,10 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
+    - name: Run
       run: dotnet run --no-build --verbosity normal
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Result
+        path: bin/Debug/net8.0/output/*.json
