@@ -29,8 +29,13 @@ jobs:
       run: dotnet build --no-restore
     - name: Run
       run: dotnet run --no-build --verbosity normal
-    - name: Upload artifact
+    - name: Upload HtmlValidator artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Result-${{ matrix.os }}.json
-        path: bin/Debug/net8.0/output/*.json
+        name: HtmlValidator-${{ matrix.os }}.json
+        path: bin/Debug/net8.0/HtmlValidator-output/*.json
+    - name: Upload HtmlValidateCli artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: HtmlValidateCli-${{ matrix.os }}.json
+        path: bin/Debug/net8.0/HtmlValidateCli-output/*.json

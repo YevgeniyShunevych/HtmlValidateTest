@@ -1,38 +1,57 @@
 ﻿using Atata.Cli.HtmlValidate;
 using Atata.HtmlValidation;
 
-namespace HtmlValidateTest;
+string testFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "reddit-frontpage.html");
 
-class Program
+RunHtmlValidator();
+Console.WriteLine();
+RunHtmlValidateCli();
+
+void RunHtmlValidator()
 {
-    static void Main(string[] args)
-    {
-        var validator = new HtmlValidator(new HtmlValidationOptions
+    Console.WriteLine("Use HtmlValidator");
+
+    HtmlValidator validator = new(
+        new HtmlValidationOptions
         {
             OutputFormatter = HtmlValidateFormatter.Names.Json,
             ResultFileFormatter = HtmlValidateFormatter.Names.Json,
             SaveResultToFile = true,
-            WorkingDirectory = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "output")
+            WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "HtmlValidator-output")
         });
 
-        // read the reddit-frontpage.html file into a string
-        string html = File.ReadAllText(
-            Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "reddit-frontpage.html"));
+    string testHtml = File.ReadAllText(testFilePath);
 
-        // These are just to show that the html file was read correctly
-        Console.WriteLine(html.Substring(0, 10));
-        Console.WriteLine(html.Substring(html.Length - 10));
+    var validationResult = validator.Validate(testHtml);
 
-        var validationResult = validator.Validate(html);
+    Console.WriteLine($"Output file: {Path.GetFileName(validationResult.ResultFilePath)}");
+    Console.WriteLine($"Length of output: {validationResult.Output.Length}");
+}
 
-        // These are just to show that the validation result was cut off.
-        Console.WriteLine(validationResult.Output.Substring(0, 10));
-        Console.WriteLine(validationResult.Output.Substring(validationResult.Output.Length - 10));
+void RunHtmlValidateCli()
+{
+    Console.WriteLine("Use HtmlValidateCli");
 
-        Console.WriteLine($"Length of output: {validationResult.Output.Length}");
-    }
+    string cliWorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "HtmlValidateCli-output");
+    if (!Directory.Exists(cliWorkingDirectory))
+        Directory.CreateDirectory(cliWorkingDirectory);
+
+    HtmlValidateCli cli = new()
+    {
+        WorkingDirectory = cliWorkingDirectory,
+    };
+
+    string cliOutputFileName = $"{Guid.NewGuid()}.json";
+
+    cli.Validate(
+        testFilePath,
+        new HtmlValidateOptions
+        {
+            Formatter = HtmlValidateFormatter.Json(cliOutputFileName)
+        });
+
+    FileInfo cliOutputFile = new(Path.Combine(cliWorkingDirectory, cliOutputFileName));
+
+    Console.WriteLine($"Output file: {cliOutputFileName}");
+    Console.WriteLine($"Length of output: {cliOutputFile.Length}");
 }
