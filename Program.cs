@@ -25,7 +25,7 @@ void RunHtmlValidator()
     var validationResult = validator.Validate(testHtml);
 
     Console.WriteLine($"Output file: {Path.GetFileName(validationResult.ResultFilePath)}");
-    Console.WriteLine($"Length of output: {validationResult.Output.Length}");
+    Console.WriteLine($"Length of output: {validationResult.Output.Length:N0}");
 }
 
 void RunHtmlValidateCli()
@@ -53,5 +53,5 @@ void RunHtmlValidateCli()
     FileInfo cliOutputFile = new(Path.Combine(cliWorkingDirectory, cliOutputFileName));
 
     Console.WriteLine($"Output file: {cliOutputFileName}");
-    Console.WriteLine($"Length of output: {cliOutputFile.Length}");
+    Console.WriteLine($"Length of output: {cliOutputFile.Length:N0}");
 }
