@@ -5,11 +5,13 @@ string testFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "reddi
 
 RunHtmlValidator();
 Console.WriteLine();
-RunHtmlValidateCli();
+RunHtmlValidateCliToOutput();
+Console.WriteLine();
+RunHtmlValidateCliToFile();
 
 void RunHtmlValidator()
 {
-    Console.WriteLine("Use HtmlValidator");
+    Console.WriteLine("Run HtmlValidator");
 
     HtmlValidator validator = new(
         new HtmlValidationOptions
@@ -28,11 +30,39 @@ void RunHtmlValidator()
     Console.WriteLine($"Length of output: {validationResult.Output.Length:N0}");
 }
 
-void RunHtmlValidateCli()
+void RunHtmlValidateCliToOutput()
 {
-    Console.WriteLine("Use HtmlValidateCli");
+    Console.WriteLine("Run HtmlValidateCli to stdout");
 
-    string cliWorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "HtmlValidateCli-output");
+    string cliWorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "HtmlValidateCli-stdout-output");
+    if (!Directory.Exists(cliWorkingDirectory))
+        Directory.CreateDirectory(cliWorkingDirectory);
+
+    HtmlValidateCli cli = new()
+    {
+        WorkingDirectory = cliWorkingDirectory,
+    };
+
+    string cliOutputFileName = $"{Guid.NewGuid()}.json";
+
+    HtmlValidateResult result = cli.Validate(
+        testFilePath,
+        new HtmlValidateOptions
+        {
+            Formatter = HtmlValidateFormatter.Json()
+        });
+
+    File.WriteAllText(Path.Combine(cliWorkingDirectory, cliOutputFileName), result.Output);
+
+    Console.WriteLine($"Output file: {cliOutputFileName}");
+    Console.WriteLine($"Length of output: {result.Output.Length:N0}");
+}
+
+void RunHtmlValidateCliToFile()
+{
+    Console.WriteLine("Use HtmlValidateCli to file");
+
+    string cliWorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "HtmlValidateCli-file-output");
     if (!Directory.Exists(cliWorkingDirectory))
         Directory.CreateDirectory(cliWorkingDirectory);
 

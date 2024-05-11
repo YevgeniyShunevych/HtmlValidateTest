@@ -34,8 +34,13 @@ jobs:
       with:
         name: HtmlValidator-${{ matrix.os }}.json
         path: bin/Debug/net8.0/HtmlValidator-output/*.json
-    - name: Upload HtmlValidateCli artifact
+    - name: Upload HtmlValidateCli-stdout artifact
       uses: actions/upload-artifact@v4
       with:
-        name: HtmlValidateCli-${{ matrix.os }}.json
-        path: bin/Debug/net8.0/HtmlValidateCli-output/*.json
+        name: HtmlValidateCli-stdout-${{ matrix.os }}.json
+        path: bin/Debug/net8.0/HtmlValidateCli-stdout-output/*.json
+    - name: Upload HtmlValidateCli-file artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: HtmlValidateCli-file-${{ matrix.os }}.json
+        path: bin/Debug/net8.0/HtmlValidateCli-file-output/*.json
